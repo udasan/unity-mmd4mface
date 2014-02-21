@@ -1,6 +1,6 @@
 ﻿/**
  * MMD4MFace
- * 2014/02/19, Udasan
+ * written by udasan, 2014/02/20
  */
 using UnityEngine;
 using System.Collections;

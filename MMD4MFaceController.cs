@@ -1,6 +1,6 @@
 ﻿/**
  * MMD4MFaceController
- * 2014/02/19, Udasan
+ * written by udasan, 2014/02/20
  */
 using UnityEngine;
 using System.Collections;
@@ -71,10 +71,31 @@ public class MMD4MFaceController : MonoBehaviour
 		return faceDict_.ContainsKey(faceName);
 	}
 
+	public bool isProcessing {
+		get {
+			foreach (var morphHelper in morphHelperDict_.Values) {
+				if (morphHelper.isProcessing) { return true; }
+			}
+			return false;
+		}
+	}
+
+	public bool isAnimating {
+		get {
+			foreach (var morphHelper in morphHelperDict_.Values) {
+				if (morphHelper.isAnimating) { return true; }
+			}
+			return false;
+		}
+	}
+
 	void Awake ()
 	{
+		var model = this.GetComponentInChildren<MMD4MecanimModel>();
+		if (!model) { return; }
+
 		var originalMorphHelperDict = new Dictionary<string, MMD4MecanimMorphHelper>();
-		foreach (var morphHelper in this.GetComponents<MMD4MecanimMorphHelper>()) {
+		foreach (var morphHelper in model.GetComponents<MMD4MecanimMorphHelper>()) {
 			originalMorphHelperDict.Add(morphHelper.morphName, morphHelper);
 		}
 
@@ -85,7 +106,7 @@ public class MMD4MFaceController : MonoBehaviour
 					MMD4MecanimMorphHelper morphHelper;
 					originalMorphHelperDict.TryGetValue(morphParam.morphName, out morphHelper);
 					if (!morphHelper) {
-						morphHelper = this.gameObject.AddComponent<MMD4MecanimMorphHelper>();
+						morphHelper = model.gameObject.AddComponent<MMD4MecanimMorphHelper>();
 						morphHelper.morphName = morphParam.morphName;
 					}
 					morphHelperDict_.Add(morphParam.morphName, morphHelper);
@@ -95,7 +116,7 @@ public class MMD4MFaceController : MonoBehaviour
 			}
 		}
 
-		SetFace (defaultFaceName);
+		SetFace(defaultFaceName);
 	}
 
 	public void SetFace (MMD4MFace face)
@@ -113,6 +134,8 @@ public class MMD4MFaceController : MonoBehaviour
 			}
 			morphHelper.overrideWeight = defaultOverrideWeight;
 		}
+
+		currentFace = face;
 	}
 
 	public void SetFace (string faceName)
