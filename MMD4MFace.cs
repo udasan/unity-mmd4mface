@@ -1,6 +1,6 @@
 ﻿/**
  * MMD4MFace
- * written by udasan, 2014/02/20
+ * author : udasan
  */
 using UnityEngine;
 using System.Collections;
@@ -19,6 +19,11 @@ public class MMD4MFace : MonoBehaviour
 	}
 	public MorphParam[] morphParams;
 
+	MMD4MFaceController faceController_;
+	public MMD4MFaceController faceController {
+		get { return faceController_ ? faceController_ : (faceController_ = this.GetComponent<MMD4MFaceController>()); }
+	}
+
 	Dictionary<string, MorphParam> morphParamDict_ = new Dictionary<string, MorphParam>();
 	public MorphParam GetMorphParam (string morphName) {
 		if (morphParamDict_.Count == 0 && morphParams.Length != 0) {
@@ -30,5 +35,17 @@ public class MMD4MFace : MonoBehaviour
 		MorphParam morphParam;
 		morphParamDict_.TryGetValue(morphName, out morphParam);
 		return morphParam;
+	}
+
+	void Update ()
+	{
+		// to show checkbox on inspector
+	}
+
+	void OnDisable ()
+	{
+		if (faceController.currentFace == this) {
+			faceController.ResetFace();
+		}
 	}
 }

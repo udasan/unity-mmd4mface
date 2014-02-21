@@ -1,6 +1,6 @@
 ﻿/**
  * MMD4MFaceController
- * written by udasan, 2014/02/20
+ * author : udasan
  */
 using UnityEngine;
 using System.Collections;
@@ -111,17 +111,31 @@ public class MMD4MFaceController : MonoBehaviour
 					}
 					morphHelperDict_.Add(morphParam.morphName, morphHelper);
 				} else {
-					// already added
+					// already included
 				}
 			}
 		}
+	}
 
+	void Start ()
+	{
 		SetFace(defaultFaceName);
+	}
+
+	void Update ()
+	{
+		// to show checkbox on inspector
+	}
+
+	void OnDisable ()
+	{
+		ResetFace();
 	}
 
 	public void SetFace (MMD4MFace face)
 	{
-		if (!face) { return; }
+		if (!this.enabled) { return; }
+		if (!face || !face.enabled) { ResetFace (); return; }
 
 		foreach (var morphHelper in morphHelperDict_.Values) {
 			var morphParam = face.GetMorphParam(morphHelper.morphName);
@@ -141,5 +155,16 @@ public class MMD4MFaceController : MonoBehaviour
 	public void SetFace (string faceName)
 	{
 		SetFace (this[faceName]);
+	}
+
+	public void ResetFace ()
+	{
+		foreach (var morphHelper in morphHelperDict_.Values) {
+			morphHelper.morphSpeed = defaultMorphSpeed;
+			morphHelper.morphWeight = defaultMorphWeight;
+			morphHelper.overrideWeight = defaultOverrideWeight;
+		}
+
+		currentFace = null;
 	}
 }
