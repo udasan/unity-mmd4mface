@@ -102,17 +102,14 @@ public class MMD4MFaceController : MonoBehaviour
 		foreach (var face in this.GetComponents<MMD4MFace>()) {
 			faceDict_.Add(face.faceName, face);
 			foreach (var morphParam in face.morphParams) {
-				if (!morphHelperDict_.ContainsKey(morphParam.morphName)) {
-					MMD4MecanimMorphHelper morphHelper;
-					originalMorphHelperDict.TryGetValue(morphParam.morphName, out morphHelper);
-					if (!morphHelper) {
-						morphHelper = model.gameObject.AddComponent<MMD4MecanimMorphHelper>();
-						morphHelper.morphName = morphParam.morphName;
-					}
-					morphHelperDict_.Add(morphParam.morphName, morphHelper);
-				} else {
-					// already included
+				if (morphHelperDict_.ContainsKey(morphParam.morphName)) { continue; }
+				MMD4MecanimMorphHelper morphHelper;
+				originalMorphHelperDict.TryGetValue(morphParam.morphName, out morphHelper);
+				if (!morphHelper) {
+					morphHelper = model.gameObject.AddComponent<MMD4MecanimMorphHelper>();
+					morphHelper.morphName = morphParam.morphName;
 				}
+				morphHelperDict_.Add(morphParam.morphName, morphHelper);
 			}
 		}
 	}
