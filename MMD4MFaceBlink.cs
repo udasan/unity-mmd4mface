@@ -78,12 +78,6 @@ public class MMD4MFaceBlink : MonoBehaviour
 			}
 			morphHelperDict_.Add(blinkParam.morphName, morphHelper);
 		}
-
-		foreach (string morphName in preferredMorphs) {
-			if (preferredModelMorphDict_.ContainsKey(morphName)) { continue; }
-			MMD4MecanimModel.Morph modelMorph = model_.GetMorph(morphName);
-			preferredModelMorphDict_.Add(morphName, modelMorph); // morph might be null
-		}
 	}
 
 	void Start ()
@@ -130,13 +124,13 @@ public class MMD4MFaceBlink : MonoBehaviour
 
 	void UpdatePreferredMorphs ()
 	{
-		foreach (var pair in preferredModelMorphDict_) {
-			if (pair.Value != null) { continue; } // already included
+		foreach (string morphName in preferredMorphs) {
+			if (preferredModelMorphDict_.ContainsKey(morphName)) { continue; } // already included
 
-			MMD4MecanimModel.Morph modelMorph = model_.GetMorph(pair.Key);
+			MMD4MecanimModel.Morph modelMorph = model_.GetMorph(morphName);
 			if (modelMorph == null) { continue; } // not found
 
-			preferredModelMorphDict_[pair.Key] = modelMorph;
+			preferredModelMorphDict_.Add(morphName, modelMorph);
 		}
 	}
 
