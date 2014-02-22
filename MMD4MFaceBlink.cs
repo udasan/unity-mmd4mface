@@ -37,6 +37,10 @@ public class MMD4MFaceBlink : MonoBehaviour
 	}
 	BlinkState blinkState_ = BlinkState.Opened;
 
+	public bool isBlinking {
+		get { return blinkState_ != BlinkState.Opened; }
+	}
+
 	MMD4MecanimModel model_;
 	Dictionary<string, MMD4MecanimModel.Morph> preferredModelMorphDict_ = new Dictionary<string, MMD4MecanimModel.Morph>();
 	bool isPreferdMorphEnabledCache_;
