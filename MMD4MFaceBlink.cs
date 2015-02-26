@@ -8,8 +8,6 @@ using System.Collections.Generic;
 
 public class MMD4MFaceBlink : MonoBehaviour
 {
-	public string blinkName;
-
 	[System.Serializable]
 	public class BlinkParam {
 		public string morphName;
